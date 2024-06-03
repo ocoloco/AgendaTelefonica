@@ -1,5 +1,5 @@
 // Ejercicio 3.1, 3.2, 3.3 , 3.4, 3.5, 3.6, 3.7, 3.8
-// 3.9
+// 3.9, 3.10, 3.11
 
 const cors = require('cors')
 const express = require('express')
@@ -14,6 +14,8 @@ app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 app.use(cors())
+
+app.use(express.static('dist'))
 
 let persons = [
 ]
@@ -56,10 +58,8 @@ app.post('/api/persons', (request, response) => {
 
     if (!persons.find(p => p.name === person.name)){
         let id = Number(Math.floor(Math.random() * 1000000))
-        console.log(id)
         // Data?
-        person.id = (persons.length > 0) ? person.id = id : 0
-
+        person.id = (persons.length > 0) ? person.id = id : 1
         response.json(person)
         persons = persons.concat(person)
     }else{
