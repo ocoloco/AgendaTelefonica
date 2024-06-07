@@ -1,5 +1,6 @@
 // Ejercicio 3.1, 3.2, 3.3 , 3.4, 3.5, 3.6, 3.7, 3.8
-// 3.9, 3.10, 3.11, 3.12, 3.13, 3.14, 3.15, 3.16, 3.17, 3.18
+// 3.9, 3.10, 3.11, 3.12, 3.13, 3.14, 3.15, 3.16, 3.17, 3.18, 3.19
+// 3.20
 
 require('dotenv').config()
 const cors = require('cors')
@@ -57,7 +58,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 // Inserta datos MongoDB
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
     if (body.name === undefined || body.number === undefined) {
         return response.status(400).json({error: 'Content is missing'})
@@ -69,7 +70,7 @@ app.post('/api/persons', (request, response) => {
 
     person.save()
     .then(savedPerson => {response.json(savedPerson)})
-    .catch(error =>{response.status(500).send({error: 'Server Error'}).end()})
+    .catch(error => next(error))
 })
 
 //Actualiza entrada
@@ -81,7 +82,7 @@ app.put('/api/persons/:id', (request, response, next) => {
         number: body.number,
     }
 
-    Person.findByIdAndUpdate(request.params.id, persona, {new: true})
+    Person.findByIdAndUpdate(request.params.id, persona, {new: true, runValidators: true, context: 'query' })
     .then(update => {response.json(update)})
     .catch(error => next(error))
 })
