@@ -1,12 +1,12 @@
 // Ejercicio 3.1, 3.2, 3.3 , 3.4, 3.5, 3.6, 3.7, 3.8
 // 3.9, 3.10, 3.11, 3.12, 3.13, 3.14, 3.15, 3.16, 3.17, 3.18, 3.19
-// 3.20
+// 3.20, 3.21
 
 require('dotenv').config()
 const cors = require('cors')
 const express = require('express')
 var morgan = require('morgan')
-morgan.token('data', (req, res) => JSON.stringify(req.body))
+morgan.token('data', (req) => JSON.stringify(req.body))
 const app = express()
 const Person = require('./models/person')
 const logerror= require('./modulos/logError')
@@ -41,9 +41,9 @@ app.get('/api/persons', (request, response, next) => {
 //Muestra informacion de una persona
 app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
-    .then(per =>{ 
+    .then(per => {
         if (per){response.json(per)}
-        else {response.status(404).send({error: 'Error Not Found'}).end()}
+        else {response.status(404).send({ error: 'Error Not Found' }).end()}
     })
     .catch(error => next(error))
 })
@@ -51,17 +51,15 @@ app.get('/api/persons/:id', (request, response, next) => {
 //Borra una persona
 app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id)
-    .then(result => {
-        response.status(204).end()
-      })
-      .catch(error => next(error))
+    .then(response.status(204).end())
+    .catch(error => next(error))
 })
 
 // Inserta datos MongoDB
 app.post('/api/persons', (request, response, next) => {
     const body = request.body
     if (body.name === undefined || body.number === undefined) {
-        return response.status(400).json({error: 'Content is missing'})
+        return response.status(400).json({ error: 'Content is missing' })
     }
     const person = new Person({
         name: body.name,
@@ -82,7 +80,7 @@ app.put('/api/persons/:id', (request, response, next) => {
         number: body.number,
     }
 
-    Person.findByIdAndUpdate(request.params.id, persona, {new: true, runValidators: true, context: 'query' })
+    Person.findByIdAndUpdate(request.params.id, persona, { new: true, runValidators: true, context: 'query' })
     .then(update => {response.json(update)})
     .catch(error => next(error))
 })

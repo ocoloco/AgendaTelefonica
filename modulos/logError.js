@@ -1,5 +1,3 @@
-const { modelName } = require("../models/person")
-
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
 
@@ -16,4 +14,4 @@ const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'Unknown endpoint' })
 }
 
-module.exports = {errorHandler, unknownEndpoint}
+module.exports = { errorHandler, unknownEndpoint }

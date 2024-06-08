@@ -26,22 +26,18 @@ const aname = process.argv[3]
 const anumber = process.argv[4]
 
 if (aname === undefined){
-  console.log("phonebook:")
+  console.log('phonebook:')
   Person.find({}).then(result => {
-    result.forEach(person =>{ 
-      console.log(person.name, "-", person.number)
+    result.forEach(person => {
+      console.log(person.name, '-', person.number)
     })
     mongoose.connection.close()
   })
-} 
-else{
+}else{
   const person = new Person({
     name: aname,
     number: anumber,
   })
-  
-  person.save().then(result => {
-    console.log('added',aname, 'number:',anumber, 'to phonebook')
+    person.save().then(console.log('added',aname, 'number:',anumber, 'to phonebook'))
     mongoose.connection.close()
-  })
-}
+  }
